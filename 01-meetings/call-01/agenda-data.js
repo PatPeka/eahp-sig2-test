@@ -2,78 +2,93 @@ window.agendaData = {
   meeting: {
     eyebrow: "EAHP SIG 2",
     title: "Interoperability in Hospital Pharmacy Automation",
-    subtitle: "Call #1 focuses on patient-specific dispense orders, unit-dose labeling, and how pharmacists and vendors will validate the first use cases.",
-    meta: ["Call #1", "60 minutes", "Offline static agenda"],
-    notesPlaceholder: "Capture decisions, owners, open questions, and validation follow-ups here."
+    subtitle: "Call #1: patient-specific dispense orders, unit-dose labeling, and validation questions for pharmacists and vendors.",
+    meta: ["Call #1", "60 minutes", "Slide deck", "Offline"]
   },
-  objectives: [
-    "Confirm the SIG 2 scope for patient-specific dispense orders and unit-dose labeling.",
-    "Select the first interoperability use cases to document.",
-    "Agree the documentation method: SOP first, flow diagram next, BPMN where appropriate.",
-    "Separate pharmacist, vendor, and FHIR/data model validation questions."
-  ],
-  agendaSections: [
+  overviewTitle: "Agenda overview",
+  slides: [
     {
       title: "Welcome and SIG 2 objectives",
-      duration: "5 min",
-      description: "Confirm the group objective: define practical interoperability guidance for hospital pharmacy automation."
+      kicker: "Slide 1",
+      lead: "Set the working frame for SIG 2: practical interoperability guidance for hospital pharmacy automation.",
+      bullets: [
+        "Confirm the scope for patient-specific dispense orders and unit-dose labeling.",
+        "Agree how use cases will be documented and validated.",
+        "Separate pharmacist, vendor, and FHIR/data model questions from the start."
+      ]
     },
     {
       title: "Reminder of SIG 1 outcomes",
-      duration: "5 min",
-      description: "Briefly connect SIG 2 work to the earlier outcomes and unresolved items from SIG 1."
+      kicker: "Slide 2",
+      lead: "SIG 2 builds on the earlier work by turning shared outcomes into practical workflow and interface guidance.",
+      bullets: [
+        "Carry forward the clinical and operational priorities identified in SIG 1.",
+        "Focus on the handoff between pharmacy information systems and automation systems.",
+        "Use SIG 1 gaps to shape the first validation questions."
+      ]
     },
     {
       title: "SIG 2 scope: patient-specific dispense order and unit-dose labeling",
-      duration: "10 min",
-      description: "Align on the automation boundary from validated prescription through preparation, labeling, and status feedback."
+      kicker: "Slide 3",
+      lead: "The core boundary is the path from validated prescription to prepared, traceable unit dose.",
+      bullets: [
+        "Patient-specific dispense order created in the pharmacy information system.",
+        "Order transmitted to a preparation or automation system.",
+        "Unit-dose preparation, labeling, traceability, and status feedback handled consistently."
+      ]
     },
     {
       title: "Candidate use cases",
-      duration: "12 min",
-      description: "Review the four candidate use cases and decide which need deeper documentation first."
+      kicker: "Slide 4",
+      lead: "Use these four scenarios to test whether the documentation method is concrete enough for pharmacists and vendors.",
+      layout: "use-cases"
     },
     {
       title: "Documentation method: SOP + flow diagram/BPMN",
-      duration: "8 min",
-      description: "Agree how each use case will be documented before clinical and vendor validation."
+      kicker: "Slide 5",
+      lead: "Document the workflow in a way that is readable first, then formal where useful.",
+      bullets: [
+        "Start each selected use case with a standard SOP template.",
+        "Add a flow diagram before introducing BPMN.",
+        "Use BPMN only where the process needs more formal modeling."
+      ],
+      layout: "process-flow"
     },
     {
       title: "Decisions expected today",
-      duration: "8 min",
-      description: "Confirm the documentation approach, decision log, and validation structure."
+      kicker: "Slide 6",
+      lead: "Confirm the working decisions needed to move from discussion to documented use cases.",
+      layout: "decisions"
     },
     {
       title: "Open questions for pharmacists and vendors",
-      duration: "8 min",
-      description: "Separate clinical workflow questions from technical integration and vendor capability questions."
+      kicker: "Slide 7",
+      lead: "Keep clinical workflow, vendor capability, and data-model questions distinct so validation stays clear.",
+      layout: "questions"
     },
     {
       title: "Next actions",
-      duration: "4 min",
-      description: "Assign owners, confirm timelines, and prepare input for the next SIG 2 call."
+      kicker: "Slide 8",
+      lead: "Leave the call with owners, inputs, and a concrete preparation path for Call #2.",
+      layout: "next-actions"
     }
   ],
   useCases: [
     {
       id: "UC-01",
-      title: "Patient-specific dispense order from PIS to preparation system",
-      description: "Define the minimum information needed to transmit a validated patient-specific dispense order from the pharmacy information system."
+      title: "Patient-specific dispense order from PIS to preparation system"
     },
     {
       id: "UC-02",
-      title: "Unit-dose labeling and traceability",
-      description: "Clarify label data, identifiers, batch references, and traceability requirements for prepared unit doses."
+      title: "Unit-dose labeling and traceability"
     },
     {
       id: "UC-03",
-      title: "Order cancellation or modification after production planning",
-      description: "Describe how late clinical or operational changes should be communicated after preparation work has been scheduled."
+      title: "Order cancellation or modification after production planning"
     },
     {
       id: "UC-04",
-      title: "Preparation confirmation and status feedback",
-      description: "Define the status messages returned to the PIS after acceptance, rejection, preparation, or completion."
+      title: "Preparation confirmation and status feedback"
     }
   ],
   processFlow: [
@@ -98,21 +113,23 @@ window.agendaData = {
       text: "Each use case will maintain separate pharmacist and vendor validation questions."
     }
   ],
-  pharmacistValidationQuestions: [
-    "Which clinical checks must happen before an order is sent?",
-    "Which label data are mandatory for safe administration?",
-    "Which status changes must be visible in the PIS?"
-  ],
-  vendorValidationQuestions: [
-    "Which message formats and identifiers are currently supported?",
-    "How are rejected, cancelled, or modified orders handled?",
-    "Which confirmation events can be returned automatically?"
-  ],
-  fhirDataModelQuestions: [
-    "Which FHIR resources best represent the dispense order, preparation task, and status feedback?",
-    "Which identifiers must remain stable across PIS, preparation system, label, and traceability records?",
-    "Which data fields are mandatory for safe unit-dose labeling and which are implementation-specific?"
-  ],
+  questions: {
+    pharmacist: [
+      "Which clinical checks must happen before an order is sent?",
+      "Which label data are mandatory for safe administration?",
+      "Which status changes must be visible in the PIS?"
+    ],
+    vendor: [
+      "Which message formats and identifiers are currently supported?",
+      "How are rejected, cancelled, or modified orders handled?",
+      "Which confirmation events can be returned automatically?"
+    ],
+    fhir: [
+      "Which FHIR resources best represent the dispense order, preparation task, and status feedback?",
+      "Which identifiers must remain stable across PIS, preparation system, label, and traceability records?",
+      "Which data fields are mandatory for safe unit-dose labeling and which are implementation-specific?"
+    ]
+  },
   nextActions: [
     "Confirm owners for the first use case drafts.",
     "Collect pharmacist validation questions for UC-01 and UC-02.",
