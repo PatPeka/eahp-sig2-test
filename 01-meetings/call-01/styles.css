@@ -8,6 +8,8 @@
   --accent: #197c72;
   --accent-dark: #115a54;
   --accent-soft: #e3f2ee;
+  --hero: #12343b;
+  --hero-muted: #cfe5df;
   --warning: #8b5a16;
   --warning-soft: #fff4dc;
   --shadow: 0 18px 48px rgba(23, 35, 41, 0.14);
@@ -28,7 +30,8 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-button {
+button,
+textarea {
   font: inherit;
 }
 
@@ -47,12 +50,12 @@ button {
 
 .slide {
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr);
-  gap: 26px;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(14px, 2vh, 24px);
   width: 100%;
   height: calc(100vh - 44px);
   min-height: 576px;
-  padding: clamp(28px, 5vw, 64px);
+  padding: clamp(24px, 4vw, 54px);
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -61,7 +64,7 @@ button {
 }
 
 .overview-slide {
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
 }
 
 .deck-meta {
@@ -70,28 +73,14 @@ button {
   gap: 10px;
 }
 
-.deck-meta span {
+.deck-meta span,
+.overview-meta span {
   padding: 7px 10px;
   border: 1px solid var(--line);
   border-radius: 999px;
   color: var(--muted);
   font-size: clamp(0.78rem, 1.2vw, 0.94rem);
   font-weight: 700;
-}
-
-.logo-strip {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  margin-bottom: clamp(18px, 2.8vh, 30px);
-}
-
-.deck-logo {
-  display: block;
-  width: auto;
-  max-width: 170px;
-  max-height: 58px;
-  object-fit: contain;
 }
 
 .eyebrow {
@@ -111,17 +100,60 @@ p {
 
 h1 {
   max-width: 1050px;
-  margin-bottom: 16px;
-  font-size: clamp(2.2rem, 5vw, 5.1rem);
-  line-height: 1.02;
+  margin-bottom: 14px;
+  font-size: clamp(2rem, 4.5vw, 4.6rem);
+  line-height: 1.03;
 }
 
 .slide-lead {
   max-width: 980px;
   margin-bottom: 0;
   color: var(--muted);
-  font-size: clamp(1.18rem, 2vw, 1.75rem);
+  font-size: clamp(1.1rem, 1.8vw, 1.62rem);
   line-height: 1.35;
+}
+
+.overview-hero {
+  display: grid;
+  gap: 18px;
+  padding: clamp(28px, 4vw, 54px);
+  border-radius: 8px;
+  background: var(--hero);
+  color: #ffffff;
+}
+
+.hero-eyebrow {
+  margin: 0;
+  color: var(--hero-muted);
+  font-size: clamp(0.82rem, 1.2vw, 1rem);
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.overview-hero h1 {
+  margin: 0;
+  max-width: 1040px;
+  font-size: clamp(2.4rem, 5.2vw, 5.4rem);
+}
+
+.hero-subtitle {
+  max-width: 980px;
+  margin: 0;
+  color: var(--hero-muted);
+  font-size: clamp(1.12rem, 2vw, 1.72rem);
+  line-height: 1.35;
+}
+
+.overview-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.overview-meta span {
+  border-color: rgba(207, 229, 223, 0.36);
+  color: #ffffff;
 }
 
 .slide-body {
@@ -133,11 +165,11 @@ h1 {
 .large-list,
 .next-action-list {
   display: grid;
-  gap: clamp(14px, 2vh, 24px);
+  gap: clamp(12px, 1.8vh, 22px);
   margin: 0;
   padding-left: 1.4em;
   color: var(--ink);
-  font-size: clamp(1.35rem, 2.5vw, 2.25rem);
+  font-size: clamp(1.25rem, 2.25vw, 2.05rem);
   line-height: 1.28;
 }
 
@@ -158,8 +190,8 @@ h1 {
 .overview-card {
   display: grid;
   gap: 12px;
-  min-height: 150px;
-  padding: 22px;
+  min-height: 132px;
+  padding: 20px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface-muted);
@@ -171,7 +203,8 @@ h1 {
 .overview-card:hover,
 .overview-card:focus-visible,
 .control-button:hover,
-.control-button:focus-visible {
+.control-button:focus-visible,
+.meeting-notes textarea:focus-visible {
   border-color: var(--accent);
   outline: 3px solid rgba(25, 124, 114, 0.18);
 }
@@ -186,7 +219,7 @@ h1 {
 }
 
 .overview-card strong {
-  font-size: clamp(1.05rem, 1.5vw, 1.45rem);
+  font-size: clamp(1rem, 1.35vw, 1.28rem);
   line-height: 1.18;
 }
 
@@ -207,20 +240,20 @@ h1 {
 .use-case-card {
   display: grid;
   gap: 14px;
-  min-height: 190px;
-  padding: 24px;
+  min-height: 160px;
+  padding: 22px;
 }
 
 .use-case-card h2 {
   margin-bottom: 0;
-  font-size: clamp(1.2rem, 2vw, 2rem);
+  font-size: clamp(1.12rem, 1.75vw, 1.78rem);
   line-height: 1.2;
 }
 
 .process-flow {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 26px;
+  gap: 24px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -230,13 +263,13 @@ h1 {
 .process-flow li {
   position: relative;
   display: grid;
-  min-height: 150px;
-  padding: 54px 14px 18px;
+  min-height: 132px;
+  padding: 50px 12px 16px;
   place-items: center;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface-muted);
-  font-size: clamp(0.95rem, 1.45vw, 1.38rem);
+  font-size: clamp(0.88rem, 1.25vw, 1.22rem);
   font-weight: 700;
   line-height: 1.2;
   text-align: center;
@@ -246,7 +279,7 @@ h1 {
   counter-increment: flow-step;
   content: counter(flow-step);
   position: absolute;
-  top: 16px;
+  top: 14px;
   left: 50%;
   display: grid;
   width: 30px;
@@ -263,9 +296,9 @@ h1 {
   content: "\2192";
   position: absolute;
   top: 50%;
-  right: -22px;
+  right: -21px;
   color: var(--accent);
-  font-size: 1.6rem;
+  font-size: 1.45rem;
   font-weight: 700;
   transform: translateY(-50%);
 }
@@ -277,8 +310,8 @@ h1 {
 }
 
 .decision-card {
-  min-height: 230px;
-  padding: 28px;
+  min-height: 190px;
+  padding: 24px;
   background: var(--warning-soft);
   border-color: #f2d39b;
 }
@@ -289,7 +322,7 @@ h1 {
 
 .decision-card p {
   margin: 16px 0 0;
-  font-size: clamp(1.3rem, 2vw, 2rem);
+  font-size: clamp(1.18rem, 1.75vw, 1.74rem);
   line-height: 1.25;
 }
 
@@ -300,29 +333,84 @@ h1 {
 }
 
 .question-column {
-  padding: 24px;
+  padding: 22px;
 }
 
 .question-column h2 {
-  margin-bottom: 18px;
+  margin-bottom: 16px;
   color: var(--accent-dark);
-  font-size: clamp(1.15rem, 1.7vw, 1.7rem);
+  font-size: clamp(1.05rem, 1.45vw, 1.45rem);
 }
 
 .question-column .large-list {
-  gap: 12px;
-  font-size: clamp(1rem, 1.35vw, 1.32rem);
-  line-height: 1.26;
+  gap: 10px;
+  font-size: clamp(0.94rem, 1.18vw, 1.18rem);
+  line-height: 1.25;
 }
 
 .next-action-list {
-  font-size: clamp(1.45rem, 2.6vw, 2.35rem);
+  font-size: clamp(1.28rem, 2.25vw, 2.05rem);
+}
+
+.slide-footer {
+  display: grid;
+  grid-template-columns: minmax(90px, 170px) minmax(220px, 560px) minmax(90px, 170px);
+  gap: clamp(14px, 2vw, 28px);
+  align-items: end;
+  width: 100%;
+  min-height: 78px;
+}
+
+.footer-logo {
+  display: block;
+  width: auto;
+  max-width: 150px;
+  max-height: 48px;
+  object-fit: contain;
+}
+
+.footer-logo-left {
+  justify-self: start;
+}
+
+.footer-logo-right {
+  justify-self: end;
+}
+
+.meeting-notes {
+  display: grid;
+  gap: 5px;
+  align-self: end;
+  justify-self: center;
+  width: 100%;
+  max-width: 560px;
+}
+
+.meeting-notes span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.meeting-notes textarea {
+  width: 100%;
+  min-height: 46px;
+  max-height: 64px;
+  resize: none;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--ink);
+  font-size: 0.95rem;
+  line-height: 1.25;
 }
 
 .deck-controls {
   position: fixed;
-  right: 28px;
-  bottom: 26px;
+  right: 36px;
+  bottom: 126px;
   z-index: 10;
   display: flex;
   align-items: center;
@@ -330,7 +418,7 @@ h1 {
   padding: 8px;
   border: 1px solid rgba(213, 222, 217, 0.9);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 10px 28px rgba(23, 35, 41, 0.14);
 }
 
@@ -387,6 +475,11 @@ h1 {
   .question-column .large-list {
     font-size: 1rem;
   }
+
+  .deck-controls {
+    right: 24px;
+    bottom: 116px;
+  }
 }
 
 @media (max-width: 720px) {
@@ -405,7 +498,7 @@ h1 {
     height: auto;
     min-height: calc(100vh - 24px);
     overflow: visible;
-    padding: 24px;
+    padding: 22px;
   }
 
   .overview-grid,
@@ -414,18 +507,24 @@ h1 {
     grid-template-columns: 1fr;
   }
 
-  .logo-strip {
-    gap: 16px;
+  .slide-footer {
+    grid-template-columns: 1fr 1fr;
   }
 
-  .deck-logo {
-    max-width: 128px;
-    max-height: 46px;
+  .meeting-notes {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    max-width: none;
+  }
+
+  .footer-logo {
+    max-width: 118px;
+    max-height: 40px;
   }
 
   .deck-controls {
     right: 12px;
-    bottom: 12px;
+    bottom: 104px;
   }
 }
 
@@ -455,6 +554,10 @@ h1 {
     min-height: 0;
     page-break-after: always;
     box-shadow: none;
+  }
+
+  .meeting-notes textarea {
+    border-color: #bfcac4;
   }
 
   .slide:last-child {
