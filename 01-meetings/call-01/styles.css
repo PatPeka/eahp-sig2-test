@@ -432,4 +432,8 @@ h1 {
     page-break-after: always;
     box-shadow: none;
   }
+
+  .slide:last-child {
+    page-break-after: auto;
+  }
 }
