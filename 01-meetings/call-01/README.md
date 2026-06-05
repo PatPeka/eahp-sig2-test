@@ -1,11 +1,15 @@
 # EAHP SIG 2 Call #1 Agenda
 
-This folder contains a simple static interactive agenda for EAHP SIG 2 Call #1.
+This folder contains a static interactive agenda for EAHP SIG 2 Call #1, focused on interoperability in hospital pharmacy automation.
+
+## Focus
+
+The agenda covers patient-specific dispense orders, unit-dose labeling, candidate use cases, SOP-based documentation, flow diagrams, BPMN where appropriate, and validation questions for pharmacists and vendors.
 
 ## Files
 
-- `index.html` contains the agenda structure.
-- `styles.css` contains the page styling.
+- `index.html` contains the agenda structure, use case cards, process flow, proposed decisions, and notes area.
+- `styles.css` contains the screen-sharing-friendly page styling.
 - `app.js` handles checklist progress and browser-saved notes.
 
 ## Usage
