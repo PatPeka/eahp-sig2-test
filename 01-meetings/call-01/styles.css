@@ -278,7 +278,7 @@ h3 {
 }
 
 .process-flow li:not(:last-child)::after {
-  content: ">";
+  content: "→";
   position: absolute;
   top: 50%;
   right: -20px;
