@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EAHP SIG 2 Call #1 Agenda</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="agenda-shell">
+    <header class="meeting-header">
+      <p class="eyebrow">EAHP SIG 2</p>
+      <h1>Call #1 Agenda</h1>
+      <p class="meeting-summary">A focused kickoff agenda for aligning goals, roles, and next steps.</p>
+      <div class="meeting-meta" aria-label="Meeting details">
+        <span>60 minutes</span>
+        <span>Kickoff call</span>
+        <span>Interactive checklist</span>
+      </div>
+    </header>
+
+    <section class="progress-panel" aria-labelledby="progress-title">
+      <div>
+        <h2 id="progress-title">Agenda Progress</h2>
+        <p><span id="completed-count">0</span> of <span id="total-count">0</span> items completed</p>
+      </div>
+      <div class="progress-track" aria-hidden="true">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </section>
+
+    <section class="agenda-list" aria-label="Meeting agenda">
+      <article class="agenda-item" data-duration="5">
+        <label>
+          <input type="checkbox">
+          <span>
+            <strong>Welcome and introductions</strong>
+            <small>5 min</small>
+          </span>
+        </label>
+        <p>Confirm attendees, roles, and the purpose of SIG 2 Call #1.</p>
+      </article>
+
+      <article class="agenda-item" data-duration="10">
+        <label>
+          <input type="checkbox">
+          <span>
+            <strong>Shared objectives</strong>
+            <small>10 min</small>
+          </span>
+        </label>
+        <p>Review what the group wants to accomplish and define success for the first phase.</p>
+      </article>
+
+      <article class="agenda-item" data-duration="15">
+        <label>
+          <input type="checkbox">
+          <span>
+            <strong>Current work and open questions</strong>
+            <small>15 min</small>
+          </span>
+        </label>
+        <p>Surface existing material, decisions needed, blockers, and information gaps.</p>
+      </article>
+
+      <article class="agenda-item" data-duration="15">
+        <label>
+          <input type="checkbox">
+          <span>
+            <strong>Priorities for next call</strong>
+            <small>15 min</small>
+          </span>
+        </label>
+        <p>Agree on the highest-priority topics and what should be prepared before Call #2.</p>
+      </article>
+
+      <article class="agenda-item" data-duration="10">
+        <label>
+          <input type="checkbox">
+          <span>
+            <strong>Actions and owners</strong>
+            <small>10 min</small>
+          </span>
+        </label>
+        <p>Capture follow-up actions, owners, and deadlines.</p>
+      </article>
+
+      <article class="agenda-item" data-duration="5">
+        <label>
+          <input type="checkbox">
+          <span>
+            <strong>Wrap-up</strong>
+            <small>5 min</small>
+          </span>
+        </label>
+        <p>Confirm decisions, next meeting timing, and any final comments.</p>
+      </article>
+    </section>
+
+    <section class="notes-panel" aria-labelledby="notes-title">
+      <div class="notes-header">
+        <h2 id="notes-title">Meeting Notes</h2>
+        <button type="button" id="clear-notes">Clear</button>
+      </div>
+      <textarea id="meeting-notes" rows="8" placeholder="Capture key decisions, actions, and follow-ups here."></textarea>
+      <p class="save-status" id="save-status" role="status">Notes save automatically in this browser.</p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
