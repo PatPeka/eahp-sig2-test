@@ -2,6 +2,7 @@ const data = window.agendaData;
 const root = document.querySelector("#agenda-root");
 const totalSlides = data.slides.length;
 const overviewIndex = -1;
+const notesStoragePrefix = "eahp-sig2-call-01-notes";
 let currentIndex = overviewIndex;
 let slideBeforePrint = overviewIndex;
 
@@ -28,6 +29,30 @@ function createElement(tag, options = {}) {
 function appendChildren(parent, children) {
   children.forEach((child) => parent.appendChild(child));
   return parent;
+}
+
+function getLogo(position) {
+  return data.meeting.logos.find((logo) => logo.position === position) || data.meeting.logos[position === "left" ? 0 : 1];
+}
+
+function getNotesKey(index) {
+  return `${notesStoragePrefix}-${index === overviewIndex ? "overview" : `slide-${index + 1}`}`;
+}
+
+function readSavedNotes(index) {
+  try {
+    return window.localStorage.getItem(getNotesKey(index)) || "";
+  } catch (error) {
+    return "";
+  }
+}
+
+function saveNotes(index, value) {
+  try {
+    window.localStorage.setItem(getNotesKey(index), value);
+  } catch (error) {
+    // Browsers may block localStorage for local files in strict privacy modes.
+  }
 }
 
 function renderDeckShell() {
@@ -76,11 +101,7 @@ function renderControls() {
 
 function renderOverview() {
   const slide = createElement("article", { className: "slide overview-slide" });
-  const header = renderSlideHeader({
-    kicker: data.meeting.eyebrow,
-    title: data.overviewTitle,
-    lead: data.meeting.subtitle
-  });
+  const hero = renderOverviewHero();
   const grid = createElement("div", { className: "overview-grid" });
 
   data.slides.forEach((item, index) => {
@@ -96,7 +117,7 @@ function renderOverview() {
     grid.appendChild(button);
   });
 
-  appendChildren(slide, [header, grid]);
+  appendChildren(slide, [hero, grid, renderSlideFooter(overviewIndex)]);
   return slide;
 }
 
@@ -132,7 +153,8 @@ function renderTopicSlide(slideData, index) {
   appendChildren(slide, [
     renderDeckMeta(index),
     header,
-    body
+    body,
+    renderSlideFooter(index)
   ]);
 
   return slide;
@@ -147,29 +169,68 @@ function renderDeckMeta(index) {
   return meta;
 }
 
-function renderLogoStrip() {
-  const logos = createElement("div", {
-    className: "logo-strip",
-    attributes: { "aria-label": "Meeting logos" }
+function renderOverviewHero() {
+  const hero = createElement("header", { className: "overview-hero" });
+  const meta = createElement("div", { className: "overview-meta" });
+
+  data.meeting.meta.forEach((item) => {
+    meta.appendChild(createElement("span", { text: item }));
   });
 
-  data.meeting.logos.forEach((logo) => {
-    logos.appendChild(createElement("img", {
-      className: "deck-logo",
-      attributes: {
-        src: logo.src,
-        alt: logo.alt
-      }
-    }));
+  appendChildren(hero, [
+    createElement("p", { className: "hero-eyebrow", text: data.meeting.eyebrow }),
+    createElement("h1", { text: data.meeting.title }),
+    createElement("p", { className: "hero-subtitle", text: data.meeting.subtitle }),
+    meta
+  ]);
+
+  return hero;
+}
+
+function renderLogo(logo, className) {
+  return createElement("img", {
+    className,
+    attributes: {
+      src: logo.src,
+      alt: logo.alt
+    }
+  });
+}
+
+function renderMeetingNotes(index) {
+  const wrapper = createElement("label", { className: "meeting-notes" });
+  const textarea = createElement("textarea", {
+    attributes: {
+      rows: "2",
+      placeholder: "Meeting notes",
+      "aria-label": "Meeting notes"
+    }
   });
 
-  return logos;
+  textarea.value = readSavedNotes(index);
+  textarea.addEventListener("input", () => saveNotes(index, textarea.value));
+
+  appendChildren(wrapper, [
+    createElement("span", { text: "Meeting notes" }),
+    textarea
+  ]);
+
+  return wrapper;
+}
+
+function renderSlideFooter(index) {
+  const footer = createElement("footer", { className: "slide-footer" });
+  appendChildren(footer, [
+    renderLogo(getLogo("left"), "footer-logo footer-logo-left"),
+    renderMeetingNotes(index),
+    renderLogo(getLogo("right"), "footer-logo footer-logo-right")
+  ]);
+  return footer;
 }
 
 function renderSlideHeader({ kicker, title, lead }) {
   const header = createElement("header", { className: "slide-header" });
   appendChildren(header, [
-    renderLogoStrip(),
     createElement("p", { className: "eyebrow", text: kicker }),
     createElement("h1", { text: title }),
     createElement("p", { className: "slide-lead", text: lead })
@@ -309,12 +370,20 @@ function restoreSlideAfterPrint() {
   showSlide(slideBeforePrint);
 }
 
+function isEditingNotes(event) {
+  return event.target.closest("textarea, input, [contenteditable='true']") !== null;
+}
+
 function bindNavigation() {
   document.querySelector("#previous-slide").addEventListener("click", previousSlide);
   document.querySelector("#next-slide").addEventListener("click", nextSlide);
   document.querySelector("#overview-slide").addEventListener("click", showOverview);
 
   document.addEventListener("keydown", (event) => {
+    if (isEditingNotes(event)) {
+      return;
+    }
+
     if (event.key === "ArrowRight" || event.key === " ") {
       event.preventDefault();
       nextSlide();
