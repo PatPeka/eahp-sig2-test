@@ -8,12 +8,20 @@ const clearNotes = document.querySelector("#clear-notes");
 const saveStatus = document.querySelector("#save-status");
 
 const storageKeys = {
-  checks: "eahp-sig2-call-01-checks",
-  notes: "eahp-sig2-call-01-notes"
+  checks: "eahp-sig2-call-01-interoperability-checks",
+  notes: "eahp-sig2-call-01-interoperability-notes"
 };
 
+function readSavedChecks() {
+  try {
+    return JSON.parse(localStorage.getItem(storageKeys.checks) || "[]");
+  } catch {
+    return [];
+  }
+}
+
 function loadState() {
-  const savedChecks = JSON.parse(localStorage.getItem(storageKeys.checks) || "[]");
+  const savedChecks = readSavedChecks();
   checkboxes.forEach((checkbox, index) => {
     checkbox.checked = Boolean(savedChecks[index]);
   });
