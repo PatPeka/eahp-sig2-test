@@ -1,10 +1,8 @@
 const data = window.agendaData;
 const root = document.querySelector("#agenda-root");
-
-const storageKeys = {
-  checks: "eahp-sig2-call-01-interoperability-checks",
-  notes: "eahp-sig2-call-01-interoperability-notes"
-};
+const totalSlides = data.slides.length;
+const overviewIndex = -1;
+let currentIndex = overviewIndex;
 
 function createElement(tag, options = {}) {
   const element = document.createElement(tag);
@@ -31,87 +29,139 @@ function appendChildren(parent, children) {
   return parent;
 }
 
-function renderHeader() {
-  const header = createElement("header", { className: "meeting-header" });
-  const meta = createElement("div", {
-    className: "meeting-meta",
-    attributes: { "aria-label": "Meeting details" }
+function renderDeckShell() {
+  root.innerHTML = "";
+
+  appendChildren(root, [
+    createElement("section", {
+      className: "slide-stage",
+      attributes: { id: "slide-stage", "aria-live": "polite" }
+    }),
+    renderControls()
+  ]);
+}
+
+function renderControls() {
+  const controls = createElement("nav", {
+    className: "deck-controls",
+    attributes: { "aria-label": "Slide controls" }
   });
 
+  appendChildren(controls, [
+    createElement("button", {
+      className: "control-button",
+      text: "←",
+      attributes: { type: "button", id: "previous-slide", "aria-label": "Previous slide" }
+    }),
+    createElement("button", {
+      className: "control-button home-button",
+      text: "Home",
+      attributes: { type: "button", id: "overview-slide", "aria-label": "Agenda overview" }
+    }),
+    createElement("p", {
+      className: "slide-counter",
+      text: `Overview / ${totalSlides}`,
+      attributes: { id: "slide-counter" }
+    }),
+    createElement("button", {
+      className: "control-button",
+      text: "→",
+      attributes: { type: "button", id: "next-slide", "aria-label": "Next slide" }
+    })
+  ]);
+
+  return controls;
+}
+
+function renderOverview() {
+  const slide = createElement("article", { className: "slide overview-slide" });
+  const header = renderSlideHeader({
+    kicker: data.meeting.eyebrow,
+    title: data.overviewTitle,
+    lead: data.meeting.subtitle
+  });
+  const grid = createElement("div", { className: "overview-grid" });
+
+  data.slides.forEach((item, index) => {
+    const button = createElement("button", {
+      className: "overview-card",
+      attributes: { type: "button", "data-slide-index": String(index) }
+    });
+
+    appendChildren(button, [
+      createElement("span", { text: `Slide ${index + 1}` }),
+      createElement("strong", { text: item.title })
+    ]);
+    grid.appendChild(button);
+  });
+
+  appendChildren(slide, [header, grid]);
+  return slide;
+}
+
+function renderTopicSlide(slideData, index) {
+  const slide = createElement("article", { className: "slide topic-slide" });
+  const header = renderSlideHeader(slideData);
+  const body = createElement("div", { className: "slide-body" });
+
+  if (slideData.bullets) {
+    body.appendChild(renderBulletList(slideData.bullets));
+  }
+
+  if (slideData.layout === "use-cases") {
+    body.appendChild(renderUseCases());
+  }
+
+  if (slideData.layout === "process-flow") {
+    body.appendChild(renderProcessFlow());
+  }
+
+  if (slideData.layout === "decisions") {
+    body.appendChild(renderDecisions());
+  }
+
+  if (slideData.layout === "questions") {
+    body.appendChild(renderQuestions());
+  }
+
+  if (slideData.layout === "next-actions") {
+    body.appendChild(renderNextActions());
+  }
+
+  appendChildren(slide, [
+    renderDeckMeta(index),
+    header,
+    body
+  ]);
+
+  return slide;
+}
+
+function renderDeckMeta(index) {
+  const meta = createElement("div", { className: "deck-meta" });
   data.meeting.meta.forEach((item) => {
     meta.appendChild(createElement("span", { text: item }));
   });
+  meta.appendChild(createElement("span", { text: `${index + 1} / ${totalSlides}` }));
+  return meta;
+}
 
+function renderSlideHeader({ kicker, title, lead }) {
+  const header = createElement("header", { className: "slide-header" });
   appendChildren(header, [
-    createElement("p", { className: "eyebrow", text: data.meeting.eyebrow }),
-    createElement("h1", { text: data.meeting.title }),
-    createElement("p", { className: "meeting-summary", text: data.meeting.subtitle }),
-    meta
+    createElement("p", { className: "eyebrow", text: kicker }),
+    createElement("h1", { text: title }),
+    createElement("p", { className: "slide-lead", text: lead })
   ]);
-
   return header;
 }
 
-function renderProgressPanel() {
-  const section = createElement("section", {
-    className: "progress-panel",
-    attributes: { "aria-labelledby": "progress-title" }
+function renderBulletList(items) {
+  const list = createElement("ul", { className: "large-list" });
+  items.forEach((item) => {
+    list.appendChild(createElement("li", { text: item }));
   });
-  const textWrap = createElement("div");
-  const progressText = createElement("p");
-  const completed = createElement("span", { text: "0", attributes: { id: "completed-count" } });
-  const total = createElement("span", { text: "0", attributes: { id: "total-count" } });
-  const track = createElement("div", {
-    className: "progress-track",
-    attributes: { "aria-hidden": "true" }
-  });
-
-  progressText.append(completed, document.createTextNode(" of "), total, document.createTextNode(" items completed"));
-  appendChildren(textWrap, [
-    createElement("h2", { text: "Agenda Progress", attributes: { id: "progress-title" } }),
-    progressText
-  ]);
-  track.appendChild(createElement("div", { className: "progress-fill", attributes: { id: "progress-fill" } }));
-  appendChildren(section, [textWrap, track]);
-
-  return section;
-}
-
-function renderObjectives() {
-  const list = createElement("ul", { className: "objective-list" });
-  data.objectives.forEach((objective) => {
-    list.appendChild(createElement("li", { text: objective }));
-  });
-
-  return renderContentSection({
-    eyebrow: "Meeting objectives",
-    title: "What Call #1 should settle",
-    content: list
-  });
-}
-
-function renderAgendaList() {
-  const section = createElement("section", {
-    className: "agenda-list",
-    attributes: { "aria-label": "Meeting agenda" }
-  });
-
-  data.agendaSections.forEach((item) => {
-    const article = createElement("article", { className: "agenda-item" });
-    const label = createElement("label");
-    const checkbox = createElement("input", { attributes: { type: "checkbox" } });
-    const titleWrap = createElement("span");
-
-    appendChildren(titleWrap, [
-      createElement("strong", { text: item.title }),
-      createElement("small", { text: item.duration })
-    ]);
-    appendChildren(label, [checkbox, titleWrap]);
-    appendChildren(article, [label, createElement("p", { text: item.description })]);
-    section.appendChild(article);
-  });
-
-  return section;
+  return list;
 }
 
 function renderUseCases() {
@@ -121,18 +171,12 @@ function renderUseCases() {
     const card = createElement("article", { className: "use-case-card" });
     appendChildren(card, [
       createElement("span", { text: useCase.id }),
-      createElement("h3", { text: useCase.title }),
-      createElement("p", { text: useCase.description })
+      createElement("h2", { text: useCase.title })
     ]);
     grid.appendChild(card);
   });
 
-  return renderContentSection({
-    eyebrow: "Candidate use cases",
-    title: "Initial interoperability scenarios",
-    content: grid,
-    titleId: "use-cases-title"
-  });
+  return grid;
 }
 
 function renderProcessFlow() {
@@ -145,12 +189,7 @@ function renderProcessFlow() {
     list.appendChild(createElement("li", { text: step }));
   });
 
-  return renderContentSection({
-    eyebrow: "Process flow",
-    title: "Baseline dispense-order pathway",
-    content: list,
-    titleId: "flow-title"
-  });
+  return list;
 }
 
 function renderDecisions() {
@@ -165,39 +204,26 @@ function renderDecisions() {
     list.appendChild(card);
   });
 
-  return renderContentSection({
-    eyebrow: "Proposed decisions",
-    title: "Items to confirm during Call #1",
-    content: list,
-    titleId: "decisions-title"
-  });
+  return list;
 }
 
 function renderQuestionColumn(title, questions) {
-  const column = createElement("div");
-  const list = createElement("ul");
-  questions.forEach((question) => {
-    list.appendChild(createElement("li", { text: question }));
-  });
-  appendChildren(column, [createElement("h3", { text: title }), list]);
+  const column = createElement("section", { className: "question-column" });
+  appendChildren(column, [
+    createElement("h2", { text: title }),
+    renderBulletList(questions)
+  ]);
   return column;
 }
 
 function renderQuestions() {
-  const columns = createElement("div", { className: "question-columns question-columns-three" });
+  const columns = createElement("div", { className: "question-grid" });
   appendChildren(columns, [
-    renderQuestionColumn("For pharmacists", data.pharmacistValidationQuestions),
-    renderQuestionColumn("For vendors", data.vendorValidationQuestions),
-    renderQuestionColumn("FHIR / data model", data.fhirDataModelQuestions)
+    renderQuestionColumn("Pharmacist validation", data.questions.pharmacist),
+    renderQuestionColumn("Vendor validation", data.questions.vendor),
+    renderQuestionColumn("FHIR / data model", data.questions.fhir)
   ]);
-
-  return renderContentSection({
-    className: "content-section questions-panel",
-    eyebrow: "Validation questions",
-    title: "Keep clinical, vendor, and data-model input separate",
-    content: columns,
-    titleId: "questions-title"
-  });
+  return columns;
 }
 
 function renderNextActions() {
@@ -205,150 +231,76 @@ function renderNextActions() {
   data.nextActions.forEach((action) => {
     list.appendChild(createElement("li", { text: action }));
   });
+  return list;
+}
 
-  return renderContentSection({
-    eyebrow: "Next actions",
-    title: "Follow-up to prepare before Call #2",
-    content: list
+function showSlide(index) {
+  currentIndex = Math.max(overviewIndex, Math.min(index, totalSlides - 1));
+  const stage = document.querySelector("#slide-stage");
+
+  stage.innerHTML = "";
+  stage.appendChild(currentIndex === overviewIndex ? renderOverview() : renderTopicSlide(data.slides[currentIndex], currentIndex));
+  updateControls();
+}
+
+function updateControls() {
+  const previous = document.querySelector("#previous-slide");
+  const next = document.querySelector("#next-slide");
+  const counter = document.querySelector("#slide-counter");
+
+  previous.disabled = currentIndex === overviewIndex;
+  next.disabled = currentIndex === totalSlides - 1;
+  counter.textContent = currentIndex === overviewIndex ? `Overview / ${totalSlides}` : `${currentIndex + 1} / ${totalSlides}`;
+
+  document.querySelectorAll("[data-slide-index]").forEach((button) => {
+    button.addEventListener("click", () => showSlide(Number(button.dataset.slideIndex)));
   });
 }
 
-function renderContentSection({ eyebrow, title, content, className = "content-section", titleId }) {
-  const section = createElement("section", { className });
-  const heading = createElement("div", { className: "section-heading" });
-  const headingId = titleId || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-  const h2 = createElement("h2", { text: title, attributes: { id: headingId } });
-
-  section.setAttribute("aria-labelledby", headingId);
-  appendChildren(heading, [
-    createElement("p", { className: "eyebrow", text: eyebrow }),
-    h2
-  ]);
-  appendChildren(section, [heading, content]);
-
-  return section;
+function nextSlide() {
+  if (currentIndex < totalSlides - 1) {
+    showSlide(currentIndex + 1);
+  }
 }
 
-function renderNotesPanel() {
-  const section = createElement("section", {
-    className: "notes-panel",
-    attributes: { "aria-labelledby": "notes-title" }
-  });
-  const header = createElement("div", { className: "notes-header" });
-  const textarea = createElement("textarea", {
-    attributes: {
-      id: "meeting-notes",
-      rows: "8",
-      placeholder: data.meeting.notesPlaceholder
+function previousSlide() {
+  if (currentIndex > overviewIndex) {
+    showSlide(currentIndex - 1);
+  }
+}
+
+function showOverview() {
+  showSlide(overviewIndex);
+}
+
+function bindNavigation() {
+  document.querySelector("#previous-slide").addEventListener("click", previousSlide);
+  document.querySelector("#next-slide").addEventListener("click", nextSlide);
+  document.querySelector("#overview-slide").addEventListener("click", showOverview);
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight" || event.key === " ") {
+      event.preventDefault();
+      nextSlide();
+    }
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      previousSlide();
+    }
+
+    if (event.key === "Home" || event.key === "Escape") {
+      event.preventDefault();
+      showOverview();
     }
   });
-
-  appendChildren(header, [
-    createElement("h2", { text: "Meeting Notes", attributes: { id: "notes-title" } }),
-    createElement("button", { text: "Clear", attributes: { type: "button", id: "clear-notes" } })
-  ]);
-  appendChildren(section, [
-    header,
-    textarea,
-    createElement("p", {
-      className: "save-status",
-      text: "Notes save automatically in this browser.",
-      attributes: { id: "save-status", role: "status" }
-    })
-  ]);
-
-  return section;
 }
 
-function readSavedChecks() {
-  try {
-    return JSON.parse(localStorage.getItem(storageKeys.checks) || "[]");
-  } catch {
-    return [];
-  }
+function renderDeck() {
+  document.title = `${data.meeting.eyebrow} Call #1 Meeting Deck`;
+  renderDeckShell();
+  bindNavigation();
+  showOverview();
 }
 
-function loadState(checkboxes, notes) {
-  const savedChecks = readSavedChecks();
-  checkboxes.forEach((checkbox, index) => {
-    checkbox.checked = Boolean(savedChecks[index]);
-  });
-
-  notes.value = localStorage.getItem(storageKeys.notes) || "";
-}
-
-function saveChecks(checkboxes) {
-  const values = checkboxes.map((checkbox) => checkbox.checked);
-  localStorage.setItem(storageKeys.checks, JSON.stringify(values));
-}
-
-function updateProgress(agendaItems, checkboxes, completedCount, totalCount, progressFill) {
-  const completed = checkboxes.filter((checkbox) => checkbox.checked).length;
-  const total = checkboxes.length;
-  const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
-
-  completedCount.textContent = completed;
-  totalCount.textContent = total;
-  progressFill.style.width = `${percent}%`;
-
-  agendaItems.forEach((item, index) => {
-    item.classList.toggle("is-complete", checkboxes[index].checked);
-  });
-}
-
-function bindInteractions() {
-  const agendaItems = Array.from(document.querySelectorAll(".agenda-item"));
-  const checkboxes = agendaItems.map((item) => item.querySelector("input[type='checkbox']"));
-  const completedCount = document.querySelector("#completed-count");
-  const totalCount = document.querySelector("#total-count");
-  const progressFill = document.querySelector("#progress-fill");
-  const notes = document.querySelector("#meeting-notes");
-  const clearNotes = document.querySelector("#clear-notes");
-  const saveStatus = document.querySelector("#save-status");
-
-  function showSavedMessage(message) {
-    saveStatus.textContent = message;
-  }
-
-  checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", () => {
-      saveChecks(checkboxes);
-      updateProgress(agendaItems, checkboxes, completedCount, totalCount, progressFill);
-    });
-  });
-
-  notes.addEventListener("input", () => {
-    localStorage.setItem(storageKeys.notes, notes.value);
-    showSavedMessage("Notes saved in this browser.");
-  });
-
-  clearNotes.addEventListener("click", () => {
-    notes.value = "";
-    localStorage.removeItem(storageKeys.notes);
-    showSavedMessage("Notes cleared.");
-    notes.focus();
-  });
-
-  loadState(checkboxes, notes);
-  updateProgress(agendaItems, checkboxes, completedCount, totalCount, progressFill);
-}
-
-function renderAgenda() {
-  document.title = `${data.meeting.eyebrow} Call #1 Agenda`;
-  appendChildren(root, [
-    renderHeader(),
-    renderProgressPanel(),
-    renderObjectives(),
-    renderAgendaList(),
-    renderUseCases(),
-    renderProcessFlow(),
-    renderDecisions(),
-    renderQuestions(),
-    renderNextActions(),
-    renderNotesPanel()
-  ]);
-
-  bindInteractions();
-}
-
-renderAgenda();
+renderDeck();
