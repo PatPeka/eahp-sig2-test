@@ -147,9 +147,29 @@ function renderDeckMeta(index) {
   return meta;
 }
 
+function renderLogoStrip() {
+  const logos = createElement("div", {
+    className: "logo-strip",
+    attributes: { "aria-label": "Meeting logos" }
+  });
+
+  data.meeting.logos.forEach((logo) => {
+    logos.appendChild(createElement("img", {
+      className: "deck-logo",
+      attributes: {
+        src: logo.src,
+        alt: logo.alt
+      }
+    }));
+  });
+
+  return logos;
+}
+
 function renderSlideHeader({ kicker, title, lead }) {
   const header = createElement("header", { className: "slide-header" });
   appendChildren(header, [
+    renderLogoStrip(),
     createElement("p", { className: "eyebrow", text: kicker }),
     createElement("h1", { text: title }),
     createElement("p", { className: "slide-lead", text: lead })
