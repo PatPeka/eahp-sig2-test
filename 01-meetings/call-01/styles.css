@@ -1,0 +1,255 @@
+:root {
+  --background: #f7f5ef;
+  --surface: #ffffff;
+  --surface-strong: #243642;
+  --accent: #1f8f7a;
+  --accent-soft: #dff3ed;
+  --text: #1c252b;
+  --muted: #60707a;
+  --line: #d9ded9;
+  --shadow: 0 16px 40px rgba(28, 37, 43, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+.agenda-shell {
+  width: min(980px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.meeting-header {
+  background: var(--surface-strong);
+  color: #ffffff;
+  padding: 32px;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #a9e2d4;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 12px;
+  font-size: clamp(2rem, 6vw, 4rem);
+  line-height: 1;
+}
+
+h2 {
+  margin-bottom: 4px;
+  font-size: 1.05rem;
+}
+
+.meeting-summary {
+  max-width: 620px;
+  margin-bottom: 22px;
+  color: #dce9ea;
+  font-size: 1.08rem;
+}
+
+.meeting-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.meeting-meta span {
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  color: #eef8f7;
+  font-size: 0.9rem;
+}
+
+.progress-panel,
+.notes-panel,
+.agenda-item {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.progress-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 300px);
+  gap: 20px;
+  align-items: center;
+  margin: 22px 0;
+  padding: 20px;
+}
+
+.progress-panel p,
+.agenda-item p,
+.save-status {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.progress-track {
+  height: 12px;
+  overflow: hidden;
+  background: #e7ece8;
+  border-radius: 999px;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: var(--accent);
+  border-radius: inherit;
+  transition: width 180ms ease;
+}
+
+.agenda-list {
+  display: grid;
+  gap: 12px;
+}
+
+.agenda-item {
+  padding: 18px;
+  transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.agenda-item:hover {
+  transform: translateY(-1px);
+  border-color: #b9ccc5;
+}
+
+.agenda-item.is-complete {
+  background: var(--accent-soft);
+  border-color: #a9d8cb;
+}
+
+.agenda-item label {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.agenda-item input {
+  width: 20px;
+  height: 20px;
+  margin-top: 3px;
+  accent-color: var(--accent);
+}
+
+.agenda-item label span {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.agenda-item strong {
+  font-size: 1.02rem;
+}
+
+.agenda-item small {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.agenda-item p {
+  padding-left: 32px;
+}
+
+.notes-panel {
+  margin-top: 22px;
+  padding: 20px;
+}
+
+.notes-header {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+button {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover,
+button:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  font: inherit;
+}
+
+textarea:focus {
+  border-color: var(--accent);
+  outline: 3px solid rgba(31, 143, 122, 0.18);
+}
+
+.save-status {
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 680px) {
+  .agenda-shell {
+    width: min(100% - 20px, 980px);
+    padding: 20px 0;
+  }
+
+  .meeting-header {
+    padding: 24px;
+  }
+
+  .progress-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .agenda-item label span {
+    display: block;
+  }
+
+  .agenda-item small {
+    display: block;
+    margin-top: 3px;
+  }
+}
