@@ -8,9 +8,10 @@ The agenda covers patient-specific dispense orders, unit-dose labeling, candidat
 
 ## Files
 
-- `index.html` contains the agenda structure, use case cards, process flow, proposed decisions, and notes area.
+- `index.html` contains the page shell and loads the local scripts.
+- `agenda-data.js` contains the meeting-specific agenda content.
 - `styles.css` contains the screen-sharing-friendly page styling.
-- `app.js` handles checklist progress and browser-saved notes.
+- `app.js` renders the agenda from `agenda-data.js` and handles checklist progress and browser-saved notes.
 
 ## Usage
 
