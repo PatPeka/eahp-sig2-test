@@ -79,6 +79,21 @@ button {
   font-weight: 700;
 }
 
+.logo-strip {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: clamp(18px, 2.8vh, 30px);
+}
+
+.deck-logo {
+  display: block;
+  width: auto;
+  max-width: 170px;
+  max-height: 58px;
+  object-fit: contain;
+}
+
 .eyebrow {
   margin: 0 0 10px;
   color: var(--accent);
@@ -397,6 +412,15 @@ h1 {
   .use-case-grid,
   .process-flow {
     grid-template-columns: 1fr;
+  }
+
+  .logo-strip {
+    gap: 16px;
+  }
+
+  .deck-logo {
+    max-width: 128px;
+    max-height: 46px;
   }
 
   .deck-controls {
