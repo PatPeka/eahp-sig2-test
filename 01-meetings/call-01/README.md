@@ -26,7 +26,7 @@ Open the deck in your browser, enter full-screen mode if desired, then share tha
 
 ## Print or Save as PDF
 
-Open the browser print dialog and choose **Save as PDF**. Use landscape orientation for the best slide layout. Browser print settings vary, but disabling headers and footers usually gives the cleanest PDF.
+Open the browser print dialog and choose **Save as PDF**. The deck switches to print mode so the overview and all eight slides are included. Use landscape orientation for the best slide layout. Browser print settings vary, but disabling headers and footers usually gives the cleanest PDF.
 
 Once GitHub Pages is enabled for the repository, the deck can also be viewed online at:
 
