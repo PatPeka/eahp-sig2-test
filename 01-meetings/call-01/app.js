@@ -3,6 +3,7 @@ const root = document.querySelector("#agenda-root");
 const totalSlides = data.slides.length;
 const overviewIndex = -1;
 let currentIndex = overviewIndex;
+let slideBeforePrint = overviewIndex;
 
 function createElement(tag, options = {}) {
   const element = document.createElement(tag);
@@ -273,6 +274,21 @@ function showOverview() {
   showSlide(overviewIndex);
 }
 
+function renderAllSlidesForPrint() {
+  slideBeforePrint = currentIndex;
+  const stage = document.querySelector("#slide-stage");
+
+  stage.innerHTML = "";
+  stage.appendChild(renderOverview());
+  data.slides.forEach((slide, index) => {
+    stage.appendChild(renderTopicSlide(slide, index));
+  });
+}
+
+function restoreSlideAfterPrint() {
+  showSlide(slideBeforePrint);
+}
+
 function bindNavigation() {
   document.querySelector("#previous-slide").addEventListener("click", previousSlide);
   document.querySelector("#next-slide").addEventListener("click", nextSlide);
@@ -294,6 +310,9 @@ function bindNavigation() {
       showOverview();
     }
   });
+
+  window.addEventListener("beforeprint", renderAllSlidesForPrint);
+  window.addEventListener("afterprint", restoreSlideAfterPrint);
 }
 
 function renderDeck() {
