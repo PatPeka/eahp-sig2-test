@@ -3,7 +3,17 @@ window.agendaData = {
     eyebrow: "EAHP SIG 2",
     title: "Interoperability in Hospital Pharmacy Automation",
     subtitle: "Call #1: patient-specific dispense orders, unit-dose labeling, and validation questions for pharmacists and vendors.",
-    meta: ["Call #1", "60 minutes", "Slide deck", "Offline"]
+    meta: ["Call #1", "60 minutes", "Slide deck", "Offline"],
+    logos: [
+      {
+        src: "../../assets/logos/peka-logo.png",
+        alt: "Peka logo"
+      },
+      {
+        src: "../../assets/logos/eahp-logo.png",
+        alt: "EAHP logo"
+      }
+    ]
   },
   overviewTitle: "Agenda overview",
   slides: [
