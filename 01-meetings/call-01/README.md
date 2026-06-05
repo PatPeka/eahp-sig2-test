@@ -1,22 +1,33 @@
-# EAHP SIG 2 Call #1 Agenda
+# EAHP SIG 2 Call #1 Meeting Deck
 
-This folder contains a static interactive agenda for EAHP SIG 2 Call #1, focused on interoperability in hospital pharmacy automation.
-
-## Focus
-
-The agenda covers patient-specific dispense orders, unit-dose labeling, candidate use cases, SOP-based documentation, flow diagrams, BPMN where appropriate, and validation questions for pharmacists and vendors.
+This folder contains a static slide-style HTML deck for EAHP SIG 2 Call #1, focused on interoperability in hospital pharmacy automation.
 
 ## Files
 
 - `index.html` contains the page shell and loads the local scripts.
-- `agenda-data.js` contains the meeting-specific agenda content.
-- `styles.css` contains the screen-sharing-friendly page styling.
-- `app.js` renders the agenda from `agenda-data.js` and handles checklist progress and browser-saved notes.
+- `agenda-data.js` contains the meeting-specific slide content.
+- `styles.css` contains the full-screen presentation styling.
+- `app.js` renders the slide deck from `agenda-data.js` and handles navigation.
 
-## Usage
+## Use as a Slide Deck
 
-Open `index.html` in a browser to view the page locally. Agenda checklist progress and notes are saved locally in the same browser using `localStorage`.
+Open `index.html` in a browser. The first view is the agenda overview. Click any topic to jump directly to that slide, or use the navigation controls in the bottom-right corner.
 
-Once GitHub Pages is enabled for the repository, the agenda can also be viewed online at:
+## Keyboard Shortcuts
+
+- `ArrowRight` or `Space`: next slide
+- `ArrowLeft`: previous slide
+- `Home`: agenda overview
+- `Escape`: agenda overview
+
+## Present in Google Meet
+
+Open the deck in your browser, enter full-screen mode if desired, then share that browser tab or window in Google Meet. Use the on-screen arrows or keyboard shortcuts to move through the slides during the call.
+
+## Print or Save as PDF
+
+Open the browser print dialog and choose **Save as PDF**. Use landscape orientation for the best slide layout. Browser print settings vary, but disabling headers and footers usually gives the cleanest PDF.
+
+Once GitHub Pages is enabled for the repository, the deck can also be viewed online at:
 
 `https://patpeka.github.io/eahp-sig2-test/01-meetings/call-01/`
