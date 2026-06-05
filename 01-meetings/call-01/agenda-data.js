@@ -7,11 +7,13 @@ window.agendaData = {
     logos: [
       {
         src: "../../assets/logos/peka-logo.png",
-        alt: "Peka logo"
+        alt: "Peka logo",
+        position: "left"
       },
       {
         src: "../../assets/logos/eahp-logo.png",
-        alt: "EAHP logo"
+        alt: "EAHP logo",
+        position: "right"
       }
     ]
   },
