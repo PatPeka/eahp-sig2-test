@@ -58,5 +58,22 @@
   </section>
 
   <script src="app.js"></script>
+  <script>
+    function parseImportedData(source) {
+      const objectSource = source.trim()
+        .replace(/^window\.agendaData\s*=\s*/, "")
+        .replace(/;\s*$/, "");
+
+      try {
+        return JSON.parse(objectSource);
+      } catch (error) {
+        const jsonCompatible = objectSource.replace(
+          /([{,]\s*)([A-Za-z_$][\w$]*)(\s*:)/g,
+          '$1"$2"$3'
+        );
+        return JSON.parse(jsonCompatible);
+      }
+    }
+  </script>
 </body>
 </html>
