@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EAHP SIG 2 Working Decks</title>
+  <style>
+    :root {
+      --background: #eef2ef;
+      --surface: #ffffff;
+      --ink: #172329;
+      --muted: #5b6970;
+      --line: #d5ded9;
+      --accent: #197c72;
+      --hero: #12343b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 40px 20px;
+      background: var(--background);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    main { width: min(900px, 100%); margin: 0 auto; }
+    header {
+      padding: clamp(28px, 5vw, 56px);
+      border-radius: 8px;
+      background: var(--hero);
+      color: #ffffff;
+    }
+    h1 { margin: 0 0 16px; font-size: clamp(2.2rem, 6vw, 4.6rem); line-height: 1.04; }
+    header p { max-width: 700px; margin: 0; color: #cfe5df; font-size: 1.2rem; line-height: 1.5; }
+    section { margin-top: 28px; }
+    h2 { font-size: 1.15rem; }
+    .deck-list { display: grid; gap: 14px; }
+    .deck-link, .coming-soon {
+      display: block;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+    .deck-link { color: var(--ink); text-decoration: none; }
+    .deck-link:hover, .deck-link:focus-visible { border-color: var(--accent); outline: 3px solid rgba(25, 124, 114, 0.18); }
+    .deck-link strong, .coming-soon strong { display: block; margin-bottom: 6px; font-size: 1.25rem; }
+    .deck-link span, .coming-soon span { color: var(--muted); }
+    .coming-soon { opacity: 0.72; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>EAHP SIG 2 Working Decks</h1>
+      <p>A Codex-generated prototype for supporting SIG 2 meetings on interoperability in hospital pharmacy automation.</p>
+    </header>
+
+    <section aria-labelledby="available-decks">
+      <h2 id="available-decks">Meeting decks</h2>
+      <div class="deck-list">
+        <a class="deck-link" href="01-meetings/call-01/">
+          <strong>Call #1</strong>
+          <span>Patient-specific dispense orders and unit-dose labeling</span>
+        </a>
+        <div class="coming-soon">
+          <strong>Call #2</strong>
+          <span>Coming soon</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
