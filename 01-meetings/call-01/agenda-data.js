@@ -1,9 +1,18 @@
 window.agendaData = {
   meeting: {
+    documentTitle: "EAHP SIG 2 Call #1 Agenda",
     eyebrow: "EAHP SIG 2",
     title: "Interoperability in Hospital Pharmacy Automation",
     subtitle: "Call #1: patient-specific dispense orders, unit-dose labeling, and validation questions for pharmacists and vendors.",
+    meetingNumber: "Call #1",
+    date: "Date to be confirmed",
     meta: ["Call #1", "60 minutes", "Slide deck", "Offline"],
+    storageKey: "eahp-sig2-call-01-notes",
+    objectives: [
+      "Confirm the scope for patient-specific dispense orders and unit-dose labeling.",
+      "Agree how use cases will be documented and validated.",
+      "Separate pharmacist, vendor, and FHIR/data model questions from the start."
+    ],
     logos: [
       {
         src: "../../assets/logos/peka-logo.png",
@@ -17,7 +26,6 @@ window.agendaData = {
       }
     ]
   },
-  overviewTitle: "Agenda overview",
   slides: [
     {
       title: "Welcome and SIG 2 objectives",
@@ -27,7 +35,8 @@ window.agendaData = {
         "Confirm the scope for patient-specific dispense orders and unit-dose labeling.",
         "Agree how use cases will be documented and validated.",
         "Separate pharmacist, vendor, and FHIR/data model questions from the start."
-      ]
+      ],
+      facilitationNotes: "Confirm participants, intended outcomes, and the boundary of today's discussion."
     },
     {
       title: "Reminder of SIG 1 outcomes",
@@ -53,7 +62,25 @@ window.agendaData = {
       title: "Candidate use cases",
       kicker: "Slide 4",
       lead: "Use these four scenarios to test whether the documentation method is concrete enough for pharmacists and vendors.",
-      layout: "use-cases"
+      layout: "use-cases",
+      items: [
+        {
+          id: "UC-01",
+          title: "Patient-specific dispense order from PIS to preparation system"
+        },
+        {
+          id: "UC-02",
+          title: "Unit-dose labeling and traceability"
+        },
+        {
+          id: "UC-03",
+          title: "Order cancellation or modification after production planning"
+        },
+        {
+          id: "UC-04",
+          title: "Preparation confirmation and status feedback"
+        }
+      ]
     },
     {
       title: "Documentation method: SOP + flow diagram/BPMN",
@@ -64,88 +91,79 @@ window.agendaData = {
         "Add a flow diagram before introducing BPMN.",
         "Use BPMN only where the process needs more formal modeling."
       ],
-      layout: "process-flow"
+      layout: "process-flow",
+      steps: [
+        "Prescription validated",
+        "Dispense order created",
+        "Order transmitted",
+        "Preparation system accepts/rejects",
+        "Unit dose prepared",
+        "Confirmation returned"
+      ]
     },
     {
       title: "Decisions expected today",
       kicker: "Slide 6",
       lead: "Confirm the working decisions needed to move from discussion to documented use cases.",
-      layout: "decisions"
+      layout: "decisions",
+      items: [
+        {
+          id: "D-001",
+          text: "Use case documentation will follow a standard SOP template."
+        },
+        {
+          id: "D-002",
+          text: "Each selected use case will include a flow diagram first, then BPMN where appropriate."
+        },
+        {
+          id: "D-003",
+          text: "Each use case will maintain separate pharmacist and vendor validation questions."
+        }
+      ]
     },
     {
       title: "Open questions for pharmacists and vendors",
       kicker: "Slide 7",
       lead: "Keep clinical workflow, vendor capability, and data-model questions distinct so validation stays clear.",
-      layout: "questions"
+      layout: "questions",
+      groups: [
+        {
+          title: "Pharmacist validation",
+          items: [
+            "Which clinical checks must happen before an order is sent?",
+            "Which label data are mandatory for safe administration?",
+            "Which status changes must be visible in the PIS?"
+          ]
+        },
+        {
+          title: "Vendor validation",
+          items: [
+            "Which message formats and identifiers are currently supported?",
+            "How are rejected, cancelled, or modified orders handled?",
+            "Which confirmation events can be returned automatically?"
+          ]
+        },
+        {
+          title: "FHIR / data model",
+          items: [
+            "Which FHIR resources best represent the dispense order, preparation task, and status feedback?",
+            "Which identifiers must remain stable across PIS, preparation system, label, and traceability records?",
+            "Which data fields are mandatory for safe unit-dose labeling and which are implementation-specific?"
+          ]
+        }
+      ]
     },
     {
       title: "Next actions",
       kicker: "Slide 8",
       lead: "Leave the call with owners, inputs, and a concrete preparation path for Call #2.",
-      layout: "next-actions"
+      layout: "next-actions",
+      items: [
+        "Confirm owners for the first use case drafts.",
+        "Collect pharmacist validation questions for UC-01 and UC-02.",
+        "Collect vendor capability questions for order changes and preparation feedback.",
+        "Prepare the SOP template and first flow diagram for review before Call #2."
+      ]
     }
-  ],
-  useCases: [
-    {
-      id: "UC-01",
-      title: "Patient-specific dispense order from PIS to preparation system"
-    },
-    {
-      id: "UC-02",
-      title: "Unit-dose labeling and traceability"
-    },
-    {
-      id: "UC-03",
-      title: "Order cancellation or modification after production planning"
-    },
-    {
-      id: "UC-04",
-      title: "Preparation confirmation and status feedback"
-    }
-  ],
-  processFlow: [
-    "Prescription validated",
-    "Dispense order created",
-    "Order transmitted",
-    "Preparation system accepts/rejects",
-    "Unit dose prepared",
-    "Confirmation returned"
-  ],
-  proposedDecisions: [
-    {
-      id: "D-001",
-      text: "Use case documentation will follow a standard SOP template."
-    },
-    {
-      id: "D-002",
-      text: "Each selected use case will include a flow diagram first, then BPMN where appropriate."
-    },
-    {
-      id: "D-003",
-      text: "Each use case will maintain separate pharmacist and vendor validation questions."
-    }
-  ],
-  questions: {
-    pharmacist: [
-      "Which clinical checks must happen before an order is sent?",
-      "Which label data are mandatory for safe administration?",
-      "Which status changes must be visible in the PIS?"
-    ],
-    vendor: [
-      "Which message formats and identifiers are currently supported?",
-      "How are rejected, cancelled, or modified orders handled?",
-      "Which confirmation events can be returned automatically?"
-    ],
-    fhir: [
-      "Which FHIR resources best represent the dispense order, preparation task, and status feedback?",
-      "Which identifiers must remain stable across PIS, preparation system, label, and traceability records?",
-      "Which data fields are mandatory for safe unit-dose labeling and which are implementation-specific?"
-    ]
-  },
-  nextActions: [
-    "Confirm owners for the first use case drafts.",
-    "Collect pharmacist validation questions for UC-01 and UC-02.",
-    "Collect vendor capability questions for order changes and preparation feedback.",
-    "Prepare the SOP template and first flow diagram for review before Call #2."
   ]
 };
