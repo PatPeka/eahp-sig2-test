@@ -8,66 +8,142 @@
     :root {
       --background: #eef2ef;
       --surface: #ffffff;
+      --surface-muted: #f6f8f6;
       --ink: #172329;
       --muted: #5b6970;
       --line: #d5ded9;
       --accent: #197c72;
       --hero: #12343b;
+      --hero-muted: #cfe5df;
+      --shadow: 0 18px 48px rgba(23, 35, 41, 0.12);
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
-      padding: 40px 20px;
+      padding: clamp(20px, 5vw, 56px);
       background: var(--background);
       color: var(--ink);
       font-family: Arial, Helvetica, sans-serif;
     }
-    main { width: min(900px, 100%); margin: 0 auto; }
-    header {
-      padding: clamp(28px, 5vw, 56px);
+
+    main {
+      width: min(920px, 100%);
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: clamp(30px, 6vw, 64px);
       border-radius: 8px;
       background: var(--hero);
       color: #ffffff;
+      box-shadow: var(--shadow);
     }
-    h1 { margin: 0 0 16px; font-size: clamp(2.2rem, 6vw, 4.6rem); line-height: 1.04; }
-    header p { max-width: 700px; margin: 0; color: #cfe5df; font-size: 1.2rem; line-height: 1.5; }
-    section { margin-top: 28px; }
-    h2 { font-size: 1.15rem; }
-    .deck-list { display: grid; gap: 14px; }
-    .deck-link, .coming-soon {
+
+    h1 {
+      margin: 0 0 16px;
+      font-size: clamp(2.35rem, 7vw, 5rem);
+      line-height: 1.03;
+    }
+
+    .subtitle {
+      max-width: 680px;
+      margin: 0;
+      color: var(--hero-muted);
+      font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+      line-height: 1.5;
+    }
+
+    .content {
+      margin-top: 30px;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 1rem;
+      text-transform: uppercase;
+    }
+
+    .deck-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .deck-card {
       display: block;
-      padding: 22px;
+      padding: 24px;
       border: 1px solid var(--line);
       border-radius: 8px;
       background: var(--surface);
     }
-    .deck-link { color: var(--ink); text-decoration: none; }
-    .deck-link:hover, .deck-link:focus-visible { border-color: var(--accent); outline: 3px solid rgba(25, 124, 114, 0.18); }
-    .deck-link strong, .coming-soon strong { display: block; margin-bottom: 6px; font-size: 1.25rem; }
-    .deck-link span, .coming-soon span { color: var(--muted); }
-    .coming-soon { opacity: 0.72; }
+
+    a.deck-card {
+      color: var(--ink);
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(23, 35, 41, 0.06);
+    }
+
+    a.deck-card:hover,
+    a.deck-card:focus-visible {
+      border-color: var(--accent);
+      outline: 3px solid rgba(25, 124, 114, 0.18);
+    }
+
+    .deck-card strong {
+      display: block;
+      font-size: clamp(1.15rem, 2vw, 1.4rem);
+      line-height: 1.3;
+    }
+
+    .deck-card-muted {
+      background: var(--surface-muted);
+      color: var(--muted);
+      cursor: not-allowed;
+    }
+
+    .template-note {
+      margin: 24px 0 0;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    code {
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--surface);
+      color: var(--ink);
+      font-family: Consolas, "Courier New", monospace;
+    }
   </style>
 </head>
 <body>
   <main>
-    <header>
+    <header class="hero">
       <h1>EAHP SIG 2 Working Decks</h1>
-      <p>A Codex-generated prototype for supporting SIG 2 meetings on interoperability in hospital pharmacy automation.</p>
+      <p class="subtitle">Codex-generated prototype for SIG 2 meeting support.</p>
     </header>
 
-    <section aria-labelledby="available-decks">
-      <h2 id="available-decks">Meeting decks</h2>
+    <section class="content" aria-labelledby="meeting-decks-title">
+      <h2 id="meeting-decks-title">Meeting decks</h2>
       <div class="deck-list">
-        <a class="deck-link" href="01-meetings/call-01/">
-          <strong>Call #1</strong>
-          <span>Patient-specific dispense orders and unit-dose labeling</span>
+        <a class="deck-card" href="01-meetings/call-01/">
+          <strong>Call #1 — Patient-specific dispense orders and unit-dose labeling</strong>
         </a>
-        <div class="coming-soon">
-          <strong>Call #2</strong>
-          <span>Coming soon</span>
+
+        <div class="deck-card deck-card-muted" aria-disabled="true">
+          <strong>Call #2 — Coming soon</strong>
         </div>
       </div>
+
+      <p class="template-note">
+        The reusable meeting deck template is available in <code>templates/meeting-deck/</code>.
+      </p>
     </section>
   </main>
 </body>
