@@ -2,7 +2,7 @@ const data = window.agendaData;
 const root = document.querySelector("#agenda-root");
 const totalSlides = data.slides.length;
 const overviewIndex = -1;
-const notesStoragePrefix = "eahp-sig2-call-01-notes";
+const notesStoragePrefix = data.meeting.storageKey || "sig2-meeting-deck-notes";
 let currentIndex = overviewIndex;
 let slideBeforePrint = overviewIndex;
 
@@ -57,7 +57,6 @@ function saveNotes(index, value) {
 
 function renderDeckShell() {
   root.innerHTML = "";
-
   appendChildren(root, [
     createElement("section", {
       className: "slide-stage",
@@ -101,7 +100,6 @@ function renderControls() {
 
 function renderOverview() {
   const slide = createElement("article", { className: "slide overview-slide" });
-  const hero = renderOverviewHero();
   const grid = createElement("div", { className: "overview-grid" });
 
   data.slides.forEach((item, index) => {
@@ -111,19 +109,18 @@ function renderOverview() {
     });
 
     appendChildren(button, [
-      createElement("span", { text: `Slide ${index + 1}` }),
+      createElement("span", { text: item.kicker || `Slide ${index + 1}` }),
       createElement("strong", { text: item.title })
     ]);
     grid.appendChild(button);
   });
 
-  appendChildren(slide, [hero, grid, renderSlideFooter(overviewIndex)]);
+  appendChildren(slide, [renderOverviewHero(), grid, renderSlideFooter(overviewIndex)]);
   return slide;
 }
 
 function renderTopicSlide(slideData, index) {
   const slide = createElement("article", { className: "slide topic-slide" });
-  const header = renderSlideHeader(slideData);
   const body = createElement("div", { className: "slide-body" });
 
   if (slideData.bullets) {
@@ -131,28 +128,28 @@ function renderTopicSlide(slideData, index) {
   }
 
   if (slideData.layout === "use-cases") {
-    body.appendChild(renderUseCases());
+    body.appendChild(renderUseCases(slideData.items));
   }
 
   if (slideData.layout === "process-flow") {
-    body.appendChild(renderProcessFlow());
+    body.appendChild(renderProcessFlow(slideData.steps));
   }
 
   if (slideData.layout === "decisions") {
-    body.appendChild(renderDecisions());
+    body.appendChild(renderDecisions(slideData.items));
   }
 
   if (slideData.layout === "questions") {
-    body.appendChild(renderQuestions());
+    body.appendChild(renderQuestions(slideData.groups));
   }
 
   if (slideData.layout === "next-actions") {
-    body.appendChild(renderNextActions());
+    body.appendChild(renderNextActions(slideData.items));
   }
 
   appendChildren(slide, [
     renderDeckMeta(index),
-    header,
+    renderSlideHeader(slideData),
     body,
     renderSlideFooter(index)
   ]);
@@ -190,10 +187,7 @@ function renderOverviewHero() {
 function renderLogo(logo, className) {
   return createElement("img", {
     className,
-    attributes: {
-      src: logo.src,
-      alt: logo.alt
-    }
+    attributes: { src: logo.src, alt: logo.alt }
   });
 }
 
@@ -214,7 +208,6 @@ function renderMeetingNotes(index) {
     createElement("span", { text: "Meeting notes" }),
     textarea
   ]);
-
   return wrapper;
 }
 
@@ -240,86 +233,69 @@ function renderSlideHeader({ kicker, title, lead }) {
 
 function renderBulletList(items) {
   const list = createElement("ul", { className: "large-list" });
-  items.forEach((item) => {
-    list.appendChild(createElement("li", { text: item }));
-  });
+  items.forEach((item) => list.appendChild(createElement("li", { text: item })));
   return list;
 }
 
-function renderUseCases() {
+function renderUseCases(items = []) {
   const grid = createElement("div", { className: "use-case-grid" });
-
-  data.useCases.forEach((useCase) => {
+  items.forEach((item) => {
     const card = createElement("article", { className: "use-case-card" });
     appendChildren(card, [
-      createElement("span", { text: useCase.id }),
-      createElement("h2", { text: useCase.title })
+      createElement("span", { text: item.id }),
+      createElement("h2", { text: item.title })
     ]);
     grid.appendChild(card);
   });
-
   return grid;
 }
 
-function renderProcessFlow() {
+function renderProcessFlow(steps = []) {
   const list = createElement("ol", {
     className: "process-flow",
-    attributes: { "aria-label": "Prescription to confirmation process flow" }
+    attributes: { "aria-label": "Meeting process flow" }
   });
-
-  data.processFlow.forEach((step) => {
-    list.appendChild(createElement("li", { text: step }));
-  });
-
+  steps.forEach((step) => list.appendChild(createElement("li", { text: step })));
   return list;
 }
 
-function renderDecisions() {
+function renderDecisions(items = []) {
   const list = createElement("div", { className: "decision-list" });
-
-  data.proposedDecisions.forEach((decision) => {
+  items.forEach((item) => {
     const card = createElement("article", { className: "decision-card" });
     appendChildren(card, [
-      createElement("span", { text: decision.id }),
-      createElement("p", { text: decision.text })
+      createElement("span", { text: item.id }),
+      createElement("p", { text: item.text })
     ]);
     list.appendChild(card);
   });
-
   return list;
 }
 
-function renderQuestionColumn(title, questions) {
+function renderQuestionColumn(group) {
   const column = createElement("section", { className: "question-column" });
   appendChildren(column, [
-    createElement("h2", { text: title }),
-    renderBulletList(questions)
+    createElement("h2", { text: group.title }),
+    renderBulletList(group.items)
   ]);
   return column;
 }
 
-function renderQuestions() {
+function renderQuestions(groups = []) {
   const columns = createElement("div", { className: "question-grid" });
-  appendChildren(columns, [
-    renderQuestionColumn("Pharmacist validation", data.questions.pharmacist),
-    renderQuestionColumn("Vendor validation", data.questions.vendor),
-    renderQuestionColumn("FHIR / data model", data.questions.fhir)
-  ]);
+  groups.forEach((group) => columns.appendChild(renderQuestionColumn(group)));
   return columns;
 }
 
-function renderNextActions() {
+function renderNextActions(items = []) {
   const list = createElement("ol", { className: "next-action-list" });
-  data.nextActions.forEach((action) => {
-    list.appendChild(createElement("li", { text: action }));
-  });
+  items.forEach((item) => list.appendChild(createElement("li", { text: item })));
   return list;
 }
 
 function showSlide(index) {
   currentIndex = Math.max(overviewIndex, Math.min(index, totalSlides - 1));
   const stage = document.querySelector("#slide-stage");
-
   stage.innerHTML = "";
   stage.appendChild(currentIndex === overviewIndex ? renderOverview() : renderTopicSlide(data.slides[currentIndex], currentIndex));
   updateControls();
@@ -358,12 +334,9 @@ function showOverview() {
 function renderAllSlidesForPrint() {
   slideBeforePrint = currentIndex;
   const stage = document.querySelector("#slide-stage");
-
   stage.innerHTML = "";
   stage.appendChild(renderOverview());
-  data.slides.forEach((slide, index) => {
-    stage.appendChild(renderTopicSlide(slide, index));
-  });
+  data.slides.forEach((slide, index) => stage.appendChild(renderTopicSlide(slide, index)));
 }
 
 function restoreSlideAfterPrint() {
@@ -383,17 +356,14 @@ function bindNavigation() {
     if (isEditingNotes(event)) {
       return;
     }
-
     if (event.key === "ArrowRight" || event.key === " ") {
       event.preventDefault();
       nextSlide();
     }
-
     if (event.key === "ArrowLeft") {
       event.preventDefault();
       previousSlide();
     }
-
     if (event.key === "Home" || event.key === "Escape") {
       event.preventDefault();
       showOverview();
@@ -405,7 +375,7 @@ function bindNavigation() {
 }
 
 function renderDeck() {
-  document.title = `${data.meeting.eyebrow} Call #1 Meeting Deck`;
+  document.title = data.meeting.documentTitle || `${data.meeting.eyebrow} ${data.meeting.meetingNumber || "Meeting"}`;
   renderDeckShell();
   bindNavigation();
   showOverview();
