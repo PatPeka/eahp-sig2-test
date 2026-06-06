@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIG 2 Agenda Builder</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">EAHP SIG 2</p>
+      <h1>Agenda Builder</h1>
+      <p>Prepare and review meeting content before generating the final slide deck.</p>
+    </div>
+    <div class="header-actions">
+      <button type="button" id="save-draft">Save draft locally</button>
+      <button type="button" id="load-draft">Load local draft</button>
+      <button type="button" id="clear-draft" class="button-muted">Clear local draft</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="editor-pane" aria-label="Agenda editor">
+      <div id="editor-root"></div>
+    </section>
+
+    <aside class="preview-pane" aria-label="Live preview">
+      <div class="preview-sticky">
+        <div class="preview-heading">
+          <div>
+            <p class="eyebrow">Live preview</p>
+            <h2>Meeting deck draft</h2>
+          </div>
+          <span id="save-status" class="save-status">Draft ready</span>
+        </div>
+        <div id="preview-root"></div>
+      </div>
+    </aside>
+  </main>
+
+  <section class="export-panel" aria-labelledby="export-title">
+    <div>
+      <p class="eyebrow">Import and export</p>
+      <h2 id="export-title">Move content between the builder and meeting decks</h2>
+    </div>
+    <label>
+      Paste agenda-data.js or agenda-data.json
+      <textarea id="import-source" rows="8" placeholder="window.agendaData = { ... };"></textarea>
+    </label>
+    <div class="button-row">
+      <button type="button" id="import-data">Load pasted data</button>
+      <button type="button" id="export-js">Export agenda-data.js</button>
+      <button type="button" id="export-json">Export agenda-data.json</button>
+      <button type="button" id="copy-js">Copy agenda-data.js</button>
+    </div>
+    <p id="message" class="message" aria-live="polite"></p>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
